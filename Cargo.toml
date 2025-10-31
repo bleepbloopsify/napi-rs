@@ -17,7 +17,7 @@ members = [
 exclude = ["./testing"]
 
 [workspace.package]
-rust-version = "1.82"
+rust-version = "1.81"
 
 [workspace.lints.clippy]
 dbg_macro = "warn"

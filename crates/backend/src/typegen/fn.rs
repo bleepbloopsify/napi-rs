@@ -27,10 +27,14 @@ impl Display for FnArgList {
       if i != 0 || self.this.is_some() {
         write!(f, ", ")?;
       }
-      let is_optional = arg.is_optional
-        && self
-          .last_required
-          .is_none_or(|last_required| i > last_required);
+
+      let was_required = match self.last_required {
+        None => true,
+        Some(last_required) => i > last_required,
+      };
+
+      let is_optional = arg.is_optional && was_required;
+
       if is_optional {
         write!(f, "{}?: {}", arg.arg, arg.ts_type)?;
       } else {
@@ -40,7 +44,6 @@ impl Display for FnArgList {
     Ok(())
   }
 }
-
 impl FromIterator<FnArg> for FnArgList {
   fn from_iter<T: IntoIterator<Item = FnArg>>(iter: T) -> Self {
     let mut args = Vec::new();
